@@ -1,0 +1,128 @@
+﻿<UserControl x:Class="CashierUI.Parts.MainTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CashierUI.Parts"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="TextLabel" TargetType="TextBox">
+            <Setter Property="IsHitTestVisible" Value="False"></Setter>
+            <Setter Property="BorderBrush" Value="Black"></Setter>
+            <Setter Property="MinWidth" Value="50"></Setter>
+            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+        </Style>
+        <Style x:Key="TextInput" TargetType="TextBox">
+            <Setter Property="MinWidth" Value="170"></Setter>
+            <Setter Property="BorderBrush" Value="Black"></Setter>
+        </Style>
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid Width="100" Height="40">
+                            <Border CornerRadius="5" Background="LightGray"></Border>
+                            <Border x:Name="Border" CornerRadius="5" Background="Transparent"  Opacity="0.75"></Border>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" TargetName="Border" Value="SkyBlue"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SmallRoundedButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid Width="50" Height="35">
+                            <Border CornerRadius="5" Background="LightGray"></Border>
+                            <Border x:Name="Border" CornerRadius="5" Background="Transparent"  Opacity="0.75"></Border>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment= "Center"></ContentPresenter>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" TargetName="Border" Value="SkyBlue"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Button x:Name="AddTabBtn" Click="AddTabBtn_Click" HorizontalAlignment="Right" Content="+" Margin="0,0,0,5" Style="{DynamicResource RoundedButtonStyle}"></Button>
+        <ListBox Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemsSource="{Binding Path=OpenTabs}">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal"></WrapPanel>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <ItemContainerTemplate>
+                    <Grid Width="250">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition MinHeight="400"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Style="{DynamicResource TextLabel}" Text="Name"></TextBox>
+                        <TextBox Style="{DynamicResource TextLabel}" Text="{Binding Path= Name}" Grid.Column="1" HorizontalContentAlignment="Left"></TextBox>
+                        <TextBlock Text="Payment Status : " Grid.Row="3"></TextBlock>
+                        <TextBlock Text="{Binding Path= PaymentStatus}" Foreground="Orange" Grid.Row="3" Grid.Column="1"></TextBlock>
+                        <ListView ItemsSource="{Binding Path= Orders}" Grid.ColumnSpan="2" Grid.Row="1">
+                            <ListView.View>
+                                <GridView>
+                                    <GridView.Columns>
+                                        <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Path=Quantity}"></GridViewColumn>
+                                        <GridViewColumn Header="Item" DisplayMemberBinding="{Binding Path= Name}"></GridViewColumn>
+                                        <GridViewColumn>
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox CommandParameter="{Binding}" x:Name="ServedCB" Click="ServedCB_Click" IsChecked="{Binding Path= IsServed}"></CheckBox>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Cost" DisplayMemberBinding="{Binding Path= Cost}"></GridViewColumn>
+                                    </GridView.Columns>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                        <TextBox Style="{DynamicResource TextLabel}" Grid.Row="2" Text="Total"></TextBox>
+                        <TextBox Style="{DynamicResource TextLabel}" Text="{Binding Path= Total}" Grid.Row="2" Grid.Column="1" HorizontalContentAlignment="Left"></TextBox>
+                        <Grid Grid.Row="4" Grid.ColumnSpan="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Button Style="{DynamicResource SmallRoundedButtonStyle}" CommandParameter="{Binding}" x:Name="RemoveTabBtn" Click="RemoveTabBtn_Click" Content="Remove" Margin="0,5,5,5"></Button>
+                            <Button Style="{DynamicResource SmallRoundedButtonStyle}" CommandParameter="{Binding}" x:Name="CloseTabBtn" Click="CloseTabBtn_Click" Content="Close" Grid.Column="2" Margin="5"></Button>
+                            <Button Style="{DynamicResource SmallRoundedButtonStyle}" CommandParameter="{Binding}" Content="Edit" Grid.Column="3" Margin="5,5,0,5" x:Name="EditTabBtn" Click="EditTabBtn_Click"></Button>
+                            <Button Style="{DynamicResource SmallRoundedButtonStyle}" Content="Pay" Grid.Column="4" CommandParameter="{Binding}" Margin="5,5,0,5" x:Name="PayBtn" Click="PayBtn_Click"></Button>
+                        </Grid>
+                    </Grid>
+                </ItemContainerTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Button x:Name="RecordsTabs" Click="RecordsTabs_Click"   Grid.Row="2" HorizontalAlignment="Left" Content="Records" Margin="0,5,0,0" Style="{DynamicResource RoundedButtonStyle}"></Button>
+        <Frame Content="{Binding Path= TabUC}" NavigationUIVisibility="Hidden" Grid.RowSpan="3"></Frame>
+    </Grid>
+</UserControl>

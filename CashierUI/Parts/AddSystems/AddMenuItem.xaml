@@ -1,0 +1,81 @@
+﻿<UserControl x:Class="CashierUI.Parts.AddSystems.AddMenuItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CashierUI.Parts.AddSystems"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="TextLabel2" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center"></Setter>
+            <Setter Property="MinWidth" Value="75"></Setter>
+        </Style>
+        <Style x:Key="TextLabel" TargetType="TextBox">
+            <Setter Property="IsHitTestVisible" Value="False"></Setter>
+            <Setter Property="BorderBrush" Value="Black"></Setter>
+        </Style>
+        <Style x:Key="TextInput" TargetType="TextBox">
+            <Setter Property="BorderBrush" Value="Black"></Setter>
+            <Setter Property="Margin" Value="5,0,0,0"></Setter>
+        </Style>
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid Width="100" Height="40">
+                            <Border CornerRadius="5" Background="LightGray"></Border>
+                            <Border x:Name="Border" CornerRadius="5" Background="Transparent"  Opacity="0.75"></Border>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" TargetName="Border" Value="SkyBlue"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Border Background="White"></Border>
+        <Grid Margin="100,60">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Style="{DynamicResource TextLabel2}" Text="Item Name :"></TextBlock>
+            <TextBox Text="{Binding Path= Name}" Style="{DynamicResource TextInput}" Grid.Column="1"></TextBox>
+            <TextBlock Style="{DynamicResource TextLabel2}" Text="Food Type :" Grid.Row="1" Margin="0,5"></TextBlock>
+            <Grid Grid.Column="1" Grid.Row="1" Margin="5,5,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <ComboBox DisplayMemberPath="Name" ItemsSource="{Binding Path= Types}" SelectedItem="{Binding Path= SelectedType}"></ComboBox>
+                <Button x:Name="addItemTypeBtn" Grid.Column="1" Content="+" Width="20" Margin="5,0" Click="addItemTypeBtn_Click"></Button>
+                <Button x:Name="RemoveTypeBtn" Grid.Column="2" Content="-" Width="20" Click="RemoveTypeBtn_Click"></Button>
+            </Grid>
+            <TextBlock Style="{DynamicResource TextLabel2}" Text="Price :" Grid.Row="2" Margin="0,5"></TextBlock>
+            <TextBox Text="{Binding Path= Price}" Style="{DynamicResource TextInput}" Grid.Column="1" Grid.Row="2" Margin="5,5,0,5"></TextBox>
+            <TextBlock Style="{DynamicResource TextLabel2}" Text="Stock :" Grid.Row="3"></TextBlock>
+            <TextBox Text="{Binding Path= Stock}" Style="{DynamicResource TextInput}" Grid.Column="1" Grid.Row="3"></TextBox>
+            <ListBox ItemsSource="{Binding Path=Errors}" Grid.Row="4" Grid.ColumnSpan="2" Background="Transparent" BorderThickness="0" IsHitTestVisible="False" FontStyle="Italic" Foreground="Red" HorizontalContentAlignment="Right" VerticalAlignment="Bottom"></ListBox>
+            <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0" Grid.ColumnSpan="2">
+                <Button x:Name="SaveBtn" Style="{DynamicResource RoundedButtonStyle}" Content="Save" Margin="0,0,30,0" Click="SaveBtn_Click"></Button>
+                <Button x:Name="CancelBtn" Style="{DynamicResource RoundedButtonStyle}" Content="Cancel" Click="CancelBtn_Click"></Button>
+            </StackPanel>
+            <Frame Content="{Binding Path= userControl}" Grid.ColumnSpan="2" Grid.RowSpan="6" NavigationUIVisibility="Hidden"></Frame>
+        </Grid>
+    </Grid>
+</UserControl>
