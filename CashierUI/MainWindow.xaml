@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         x:Name="mainWindow"
         Loaded="mainWindow_Loaded"
-        Title="MainWindow" Height="800" Width="1000">
+        Title="Cashier Helper" Height="800" Width="1000">
     <Grid>
         <TabControl>
             <TabItem Header="Tabs" MinWidth="100" MinHeight="50">
