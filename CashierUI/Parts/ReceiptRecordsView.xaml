@@ -65,6 +65,7 @@
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path= RefNo}" Header="Ref No." ></GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Path= Date}" Header="Date" ></GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Path= Name}" Header="Customer Name"></GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Path= Tip}" Header="Tip"></GridViewColumn>

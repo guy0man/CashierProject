@@ -59,6 +59,7 @@ namespace CashierUI.Dto
     public class TabDetails
     {
         public int TabId { get; set; }
+        public string RefNo { get; set; }
         public string Name { get; set; }
         public string Tip { get; set; }
         public string Total { get; set; }
@@ -66,6 +67,7 @@ namespace CashierUI.Dto
         public TabDetails(Tab tab)
         {
             TabId = tab.TabId;
+            RefNo = $"{tab.TabId : 00000000000000000000}";
             Name = tab.CustomerName;
             Tip = $"₱{tab.Tip}";
             Total = $"₱{tab.Total}";
