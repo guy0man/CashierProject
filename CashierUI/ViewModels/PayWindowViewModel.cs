@@ -134,6 +134,7 @@ namespace CashierUI.ViewModels
                 }
             }
         }
+
         public bool DialogResult { get; set; }
     }
     public class PayWindowValidator : AbstractValidator<PayWindowViewModel>

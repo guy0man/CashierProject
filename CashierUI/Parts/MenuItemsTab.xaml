@@ -11,7 +11,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Grid Width="100" Height="20">
+                        <Grid Width="100" Height="40">
                             <Border CornerRadius="5" Background="LightGray"></Border>
                             <Border x:Name="Border" CornerRadius="5" Background="Transparent"  Opacity="0.75"></Border>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
@@ -30,10 +30,11 @@
     <Grid>
         <Grid.RowDefinitions>
 
-            <RowDefinition></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <TabControl ItemsSource="{Binding Path=MenuTabs}" BorderThickness="0,1,0,0"></TabControl>
+        <Button HorizontalAlignment="Right" Style="{DynamicResource RoundedButtonStyle}" Content="+" x:Name="AddMenu" Click="AddMenu_Click" Visibility="{Binding Path= addMenuVis}"></Button>
+        <TabControl Grid.Row="1" ItemsSource="{Binding Path=MenuTabs}" BorderThickness="0,1,0,0"></TabControl>
         <Frame Content="{Binding Path=MenuTabUC}" Grid.RowSpan="3" NavigationUIVisibility="Hidden"></Frame>
     </Grid>
 </UserControl>

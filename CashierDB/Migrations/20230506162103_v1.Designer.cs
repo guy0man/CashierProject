@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CashierDB.Migrations
 {
     [DbContext(typeof(CashierContext))]
-    [Migration("20230503131602_v1")]
+    [Migration("20230506162103_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -171,6 +171,12 @@ namespace CashierDB.Migrations
                     b.Property<bool>("IsCanceled")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsOld")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsServed")
+                        .HasColumnType("bit");
+
                     b.Property<int>("MenuItemId")
                         .HasColumnType("int");
 
@@ -209,6 +215,9 @@ namespace CashierDB.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsClose")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");

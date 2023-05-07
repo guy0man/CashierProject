@@ -86,23 +86,65 @@ namespace CashierUI.ViewModels
 
         }
         public void RemoveOrder(PartialOrderItem order)
-        {
-            Orders.Remove(order);
-            LoadTotal();
+        {         
+            var menuItem = _context.MenuItems.First(c=>c.MenuItemId == order.MenuItemId);
+            menuItem.Stock += order.Quantity;
+            try
+            {
+                _context.SaveChanges();
+                Orders.Remove(order);
+                LoadTotal();
+                LoadMenuTabs();
+            }     
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.InnerException.Message);
+            }
         }
         public void AddQuant(PartialOrderItem order)
         {
-            order.Quantity++;
-            CalculateTotal(order.Quantity, order);
-            OnPropertyChanged(nameof(Orders));
-            LoadTotal();
+            var menuItem = _context.MenuItems.First(c=>c.MenuItemId==order.MenuItemId);
+            if (menuItem.Stock == 0)
+            {
+                MessageBox.Show("This item is out of stock", "Error");
+                return;
+            }
+            else menuItem.Stock -= 1;
+            try
+            {
+                _context.SaveChanges();
+                order.Quantity++;
+                CalculateTotal(order.Quantity, order);
+                OnPropertyChanged(nameof(Orders));
+                LoadTotal();
+                LoadMenuTabs();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.InnerException.Message);
+            }
         }
         public void MinusQuant(PartialOrderItem order)
         {
-            if (order.Quantity == 1) return;
-            order.Quantity--;
-            CalculateTotal(order.Quantity, order);
-            LoadTotal();
+            if (order.ServedQuantity != 0)
+            {
+                if (order.Quantity == order.ServedQuantity) return;
+            }
+            else if (order.Quantity == 1) return;
+            var menuItem = _context.MenuItems.First(c => c.MenuItemId == order.MenuItemId);
+            menuItem.Stock += 1;
+            try
+            {
+                _context.SaveChanges();
+                order.Quantity--;
+                CalculateTotal(order.Quantity, order);
+                LoadTotal();
+                LoadMenuTabs();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.InnerException.Message);
+            }
         }
         public virtual void Add()
         {
@@ -126,7 +168,8 @@ namespace CashierUI.ViewModels
                         Total = order.Total,
                         RealTotal = order.RealTotal,
                         IsCanceled = order.IsCanceled,
-                        IsServed = order.IsServed
+                        IsServed = order.IsServed,
+                        IsOld = order.IsOld
                     });
                 }
                 try
@@ -145,7 +188,21 @@ namespace CashierUI.ViewModels
         }
         public virtual void Cancel()
         {
-            DialogResult = true;
+            foreach (var order in Orders)
+            {
+                var menuitem = _context.MenuItems.First(c=>c.MenuItemId == order.MenuItemId);
+                menuitem.Stock += order.Quantity;
+            }
+            try
+            {
+                _context.SaveChanges();
+                DialogResult = true;
+            }  
+            catch(Exception ex) 
+            {
+                DialogResult = false;
+                MessageBox.Show(ex.InnerException.Message); 
+            }
             Parent.CheckAddTab();
         }
         

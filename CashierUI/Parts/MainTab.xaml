@@ -57,6 +57,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
@@ -69,10 +70,10 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <ItemContainerTemplate>
-                    <Grid Width="250">
+                    <Grid Width="500">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition MinHeight="400"></RowDefinition>
+                            <RowDefinition MinHeight="600"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
@@ -94,7 +95,7 @@
                                         <GridViewColumn>
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <CheckBox CommandParameter="{Binding}" x:Name="ServedCB" Click="ServedCB_Click" IsChecked="{Binding Path= IsServed}"></CheckBox>
+                                                    <CheckBox x:Name="ServedCB" IsChecked="{Binding Path= IsServed}" CommandParameter="{Binding}" Click="ServedCB_Click"></CheckBox>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
@@ -122,7 +123,7 @@
                 </ItemContainerTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Button x:Name="RecordsTabs" Click="RecordsTabs_Click"   Grid.Row="2" HorizontalAlignment="Left" Content="Records" Margin="0,5,0,0" Style="{DynamicResource RoundedButtonStyle}"></Button>
-        <Frame Content="{Binding Path= TabUC}" NavigationUIVisibility="Hidden" Grid.RowSpan="3"></Frame>
+        <Button x:Name="RecordsTabs" Click="RecordsTabs_Click"   Grid.Row="3" HorizontalAlignment="Left" Content="Records" Margin="0,5,0,0" Style="{DynamicResource RoundedButtonStyle}"></Button>
+        <Frame Content="{Binding Path= TabUC}" NavigationUIVisibility="Hidden" Grid.RowSpan="4"></Frame>
     </Grid>
 </UserControl>

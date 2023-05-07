@@ -104,6 +104,17 @@ namespace CashierUI.ViewModels
             }
             return result.IsValid;
         }
+        public virtual bool TypeValidate()
+        {
+            var validator = new RemoveTypeValidator();
+            var result = validator.Validate(this);
+            Errors.Clear();
+            foreach (var error in result.Errors)
+            {
+                Errors.Add(error.ErrorMessage);
+            }
+            return result.IsValid;
+        }
         public AddItemTypeViewModel itemTypeVM { get; set; }
         public UserControl userControl { get; set; }
         public void AddType()
@@ -125,6 +136,8 @@ namespace CashierUI.ViewModels
         }
         public void RemoveType()
         {
+            bool isValid = TypeValidate();
+            if (isValid == false) return;
             string sureMessage = $"Are you sure to permanently remove selected item type named \"{SelectedType.Name}\"?";
             var DialogResult = MessageBox.Show(sureMessage, "Warning", MessageBoxButton.YesNo);
             if (DialogResult == MessageBoxResult.Yes)
@@ -155,6 +168,13 @@ namespace CashierUI.ViewModels
             RuleFor(c => c.Price).Must(c => float.TryParse(c, out var val)).WithMessage("Invalid Price");
             RuleFor(c=>c.Stock).NotEmpty();
             RuleFor(c => c.Stock).Must(c => int.TryParse(c, out var val)).WithMessage("Invalid Stock Value");
+        }
+    }
+    public class RemoveTypeValidator : AbstractValidator<AddMenuItemViewModel>
+    {
+        public RemoveTypeValidator()
+        {         
+            RuleFor(c => c.SelectedType).NotEmpty();           
         }
     }
 }

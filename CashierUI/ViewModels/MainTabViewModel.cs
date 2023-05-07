@@ -16,6 +16,7 @@ using CashierUI.Helper;
 using CashierUI.Parts;
 using CashierUI.Parts.AddSystems;
 using CashierUI.Parts.EditSystems;
+using CashierUI.Parts.ClearSystems;
 using Microsoft.EntityFrameworkCore;
 
 namespace CashierUI.ViewModels
@@ -40,13 +41,13 @@ namespace CashierUI.ViewModels
         private CashierContext _context;
         public MainTabViewModel(CashierContext context)
         {
-            _context = context;           
+            _context = context;    
         }
 
         #region Menu  
         public ObservableCollection<TabItem> MenuTabs { get; set; } = new();
         public void LoadMenuTabs()
-        {          
+        { 
             var menuTabs = _context.ItemTypes
                 .OrderBy(c => c.Name)
                 .Select(c => new ItemTypeName(c.ItemTypeId, c.Name))
@@ -64,7 +65,17 @@ namespace CashierUI.ViewModels
                 tabItem.Width = 100;
                 MenuTabs.Add(tabItem);
             }
-        }        
+            if (MenuTabs.Count == 0) addMenuVis = Visibility.Visible;
+            else addMenuVis = Visibility.Collapsed;
+            OnPropertyChanged(nameof(addMenuVis));
+        }
+        public Visibility addMenuVis { get; set; }
+        public MenuTabViewModel menuVM { get; set; }
+        public void AddMenu()
+        {
+            menuVM = new MenuTabViewModel(_context, this, "Helper");
+            menuVM.AddMenuItem();
+        }
         public UserControl MenuTabUC { get; set; }      
         public void propertyChangeInMenu()
         {
@@ -119,8 +130,21 @@ namespace CashierUI.ViewModels
             }
             OnPropertyChanged(nameof(TabUC));
         }
+        public void CheckCancelEditTab()
+        {
+            if (editTabVM.DialogResult)
+            {
+                TabUC = null;
+            }
+            OnPropertyChanged(nameof(TabUC));
+        }
         public void PayTab(OpenTabDetails tab)
         {
+            if (tab._paymentStatus == "Paid")
+            {
+                MessageBox.Show("This tab is already paid");
+                return;
+            }
             var viewmodel = new PayWindowViewModel(_context,this, tab);
             var window = new PayWindow();
             window.DataContext = viewmodel;
@@ -128,6 +152,11 @@ namespace CashierUI.ViewModels
         }
         public void CloseTab(OpenTabDetails tabToClose)
         {
+            if (tabToClose.Orders.Any(c=>c.IsServed == false))
+            {
+                MessageBox.Show("You cannot close a tab with unserved orders", "Errors");
+                return;
+            }
             if (tabToClose.PaymentStatus != "Paid")
             {
                 MessageBox.Show("You cannot close an unpaid tab", "Error");
@@ -165,17 +194,16 @@ namespace CashierUI.ViewModels
             }
             LoadOpenTabs();
         }
-        public void Serve(ShortOrderItem item)
+        public void ServeOrder(ShortOrderItem itemToServe)
         {
-            var menuItem = _context.MenuItems.First(c => c.MenuItemId == item.MenuItemId);
-            if (item.IsServed) menuItem.Stock -= item.Quantity;          
-            else menuItem.Stock += item.Quantity;
+            var order = _context.OrderLists.First(c => c.OrderListId == itemToServe.OrderItemId);
+            if(itemToServe.IsServed) order.IsServed = false;         
+            else order.IsServed = true;
             try
             {
                 _context.SaveChanges();
-                LoadMenuTabs();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.InnerException.Message);
             }
@@ -194,6 +222,41 @@ namespace CashierUI.ViewModels
         {
             if (receiptRecordsVM.DialogResult) TabUC = null;
             OnPropertyChanged(nameof(TabUC));
+        }
+        #endregion
+        #region Settings
+        public UserControl SettingsUC { get;set; }
+        public void OpenSettings()
+        {
+            SettingsUC = new Settings();
+            OnPropertyChanged(nameof(SettingsUC));
+        }
+        public void CloseSettings()
+        {
+            SettingsUC = null;
+            OnPropertyChanged(nameof(SettingsUC));
+        }
+        public void ClearTabs()
+        {
+            var datacontext = new ClearAllTabsViewModel(_context, this);
+            var window = new ConfirmClearTabs();
+            window.DataContext = datacontext;
+            window.ShowDialog();
+        }
+        public void ClearMenu()
+        {
+            var datacontext = new ClearMenuViewModel(_context, this);
+            var window = new ConfirmClearMenu();
+            window.DataContext = datacontext;
+            window.ShowDialog();
+
+        }
+        public void ClearDatabase()
+        {
+            var datacontext = new ClearDatabaseViewModel(_context, this);
+            var window = new ConfirmClearDatabase();
+            window.DataContext = datacontext;
+            window.ShowDialog();
         }
         #endregion
     }

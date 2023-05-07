@@ -4,22 +4,22 @@
 
 namespace CashierDB.Migrations
 {
-    public partial class v13 : Migration
+    public partial class v11 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "IsServed",
+            migrationBuilder.AddColumn<int>(
+                name: "ServedQuantity",
                 table: "OrderList",
-                type: "bit",
+                type: "int",
                 nullable: false,
-                defaultValue: false);
+                defaultValue: 0);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "IsServed",
+                name: "ServedQuantity",
                 table: "OrderList");
         }
     }

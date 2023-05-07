@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CashierUI.Parts"
         mc:Ignorable="d"
-        Title="PayWindow" Height="250" Width="400">
+        Title="Pay Window" Height="250" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="TextLabel2" TargetType="TextBlock">
             <Setter Property="TextAlignment" Value="Center"></Setter>

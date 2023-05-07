@@ -15,7 +15,9 @@ namespace CashierDB.Tables
         public float Total { get; set; }
         public float RealTotal { get; set; }
         public bool IsCanceled { get; set; }
+        public bool IsOld { get; set; }
         public bool IsServed { get; set; }
+        public int ServedQuantity { get; set; }
         //links
         public Tab TabLink { get; set; }
         public MenuItem MenuItemLink { get; set; }

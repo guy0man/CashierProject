@@ -32,6 +32,7 @@ namespace CashierDB.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Total = table.Column<float>(type: "real", nullable: false),
                     Tip = table.Column<float>(type: "real", nullable: false),
+                    IsClose = table.Column<bool>(type: "bit", nullable: false),
                     IsPaid = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -72,7 +73,9 @@ namespace CashierDB.Migrations
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Total = table.Column<float>(type: "real", nullable: false),
                     RealTotal = table.Column<float>(type: "real", nullable: false),
-                    IsCanceled = table.Column<bool>(type: "bit", nullable: false)
+                    IsCanceled = table.Column<bool>(type: "bit", nullable: false),
+                    IsOld = table.Column<bool>(type: "bit", nullable: false),
+                    IsServed = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

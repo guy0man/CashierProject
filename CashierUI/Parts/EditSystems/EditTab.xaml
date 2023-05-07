@@ -109,7 +109,7 @@
                             <GridViewColumn>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="RemoveOrder" Click="RemoveOrder_Click" Style="{DynamicResource SmallRoundedButtonStyle}" Content="-" FontSize="15" CommandParameter="{Binding}"></Button>
+                                        <Button x:Name="RemoveOrder" Click="RemoveOrder_Click" Style="{DynamicResource SmallRoundedButtonStyle}" Content="-" FontSize="15" CommandParameter="{Binding}" Visibility="{Binding Path=ButtonVis}"></Button>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

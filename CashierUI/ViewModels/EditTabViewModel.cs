@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace CashierUI.ViewModels
 {
@@ -32,6 +33,9 @@ namespace CashierUI.ViewModels
                 orderItem.Quantity = item.Quantity;
                 CalculateTotal(orderItem.Quantity,orderItem);
                 orderItem.IsCanceled = item.IsCanceled;
+                orderItem.IsServed = item.IsServed;
+                orderItem.ServedQuantity = item.ServedQuantity;
+                orderItem.IsOld = true;
                 Orders.Add(orderItem);
             }
             LoadTotal();
@@ -48,14 +52,16 @@ namespace CashierUI.ViewModels
                 tab.OrderLists = new List<OrderList>();
                 foreach (var order in Orders)
                 {
-                    tab.OrderLists.Add(new OrderList()
-                    {
-                        MenuItemId = order.MenuItemId,
-                        Quantity = order.Quantity,
-                        Total = order.Total,
-                        RealTotal = order.RealTotal,
-                        IsCanceled = order.IsCanceled
-                    });
+                    var item = new OrderList();
+                    item.MenuItemId = order.MenuItemId;
+                    item.Quantity = order.Quantity;
+                    item.Total = order.Total;
+                    item.RealTotal = order.RealTotal;
+                    item.IsCanceled = order.IsCanceled;
+                    if (order.ServedQuantity != order.Quantity) item.IsServed = false;
+                    else item.IsServed = order.IsServed;
+                    item.ServedQuantity = order.ServedQuantity;
+                    tab.OrderLists.Add(item);
                 }
                 try
                 {
@@ -72,7 +78,7 @@ namespace CashierUI.ViewModels
         public override void Cancel()
         {
             DialogResult = true;
-            Parent.CheckEditTab();
+            Parent.CheckCancelEditTab();
         }
     }
 }

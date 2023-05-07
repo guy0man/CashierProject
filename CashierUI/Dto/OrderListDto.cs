@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CashierUI.Dto
 {
@@ -39,8 +40,27 @@ namespace CashierUI.Dto
             }
         }
         public float Price { get; set; }
-        public float Total { get; set; }     
-        public bool IsServed { get; set; }
+        public float Total { get; set; }
+        public bool IsServed { get; set; }      
+        public int ServedQuantity { get; set; }
+        public Visibility ButtonVis { get; set; }
+        public bool _isOld;
+        public bool IsOld
+        {
+            get => _isOld;
+            set
+            {
+                _isOld = value;
+                if (_isOld)
+                {
+                    ButtonVis = Visibility.Hidden;
+                }
+                else
+                {
+                    ButtonVis = Visibility.Visible;
+                }
+            }
+        }
         public float RealTotal { get; set; }
         public string _realTotalText;
         public string realTotalText
@@ -59,6 +79,12 @@ namespace CashierUI.Dto
             set
             {
                 _isCanceled = value;
+                if (IsServed)
+                {
+                    MessageBox.Show("You cannot cancel a served item", "Error");
+                    _isCanceled = false;
+                    return;
+                }
                 if (_isCanceled)
                 {
                     RealTotal = 0;
@@ -84,14 +110,27 @@ namespace CashierUI.Dto
             realTotalText = $"₱{Price}";
             IsCanceled = false;
             IsServed = false;
+            ServedQuantity = 0;
+            IsOld = false;
         }
     }
     public class ShortOrderItem
     {
         public int OrderItemId { get; set; }
         public int MenuItemId { get; set; }
-        public bool IsCanceled { get; set; }       
-        public bool IsServed { get; set; }
+        public bool IsCanceled { get; set; }
+        public bool _isServed;
+        public bool IsServed
+        {
+            get => _isServed;
+            set
+            {
+                _isServed = value;
+                if (_isServed == true) ServedQuantity = Quantity;
+                else ServedQuantity = 0;
+            }
+        }
+        public int ServedQuantity { get; set; }
         public string Name { get; set; }
         public int Quantity { get; set; }
         public string Cost { get; set; }
@@ -101,6 +140,8 @@ namespace CashierUI.Dto
             MenuItemId = order.MenuItemId;
             Name = order.MenuItemLink.Name;
             IsCanceled = order.IsCanceled;
+            IsServed = order.IsServed;
+            ServedQuantity = order.ServedQuantity;
             Quantity = order.Quantity;
             if (order.IsCanceled) Cost = $"Cancelled";
             else Cost = $"₱{order.RealTotal.ToString()}";       

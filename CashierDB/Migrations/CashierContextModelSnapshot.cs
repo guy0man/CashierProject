@@ -169,6 +169,9 @@ namespace CashierDB.Migrations
                     b.Property<bool>("IsCanceled")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsOld")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsServed")
                         .HasColumnType("bit");
 
@@ -180,6 +183,9 @@ namespace CashierDB.Migrations
 
                     b.Property<float>("RealTotal")
                         .HasColumnType("real");
+
+                    b.Property<int>("ServedQuantity")
+                        .HasColumnType("int");
 
                     b.Property<int>("TabId")
                         .HasColumnType("int");

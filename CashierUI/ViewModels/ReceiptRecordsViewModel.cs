@@ -54,9 +54,9 @@ namespace CashierUI.ViewModels
             c.Date.ToString().Contains(search)));
             UpdateTotalPages(query.Count());
             var tabs = query
-                .OrderBy(c=>c.Date)
+                .OrderByDescending(c=>c.Date)
                 .Select(c => new TabDetails(c))
-                .Skip(PageDetails.ItemsPerPage * (PageDetails.CurrentPage - 1))
+                .Skip(PageDetails.ItemsPerPage * (PageDetails.CurrentPage))
                 .Take(PageDetails.ItemsPerPage)
                 .ToList();
             Tabs.Clear();

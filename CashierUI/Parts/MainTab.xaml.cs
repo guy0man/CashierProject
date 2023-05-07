@@ -71,19 +71,19 @@ namespace CashierUI.Parts
             var DialogResult = MessageBox.Show(sureMessage, "Warning", MessageBoxButton.YesNo);
             if (DialogResult == MessageBoxResult.Yes) _context.CloseTab(tab);
         }
-
-        private void ServedCB_Click(object sender, RoutedEventArgs e)
-        {
-            _context = DataContext as MainTabViewModel;
-            CheckBox b = sender as CheckBox;
-            ShortOrderItem tab = b.CommandParameter as ShortOrderItem;
-            _context.Serve(tab);
-        }      
-
+         
         private void RecordsTabs_Click(object sender, RoutedEventArgs e)
         {
             _context = DataContext as MainTabViewModel;
             _context.ViewTabs();
         }
+
+        private void ServedCB_Click(object sender, RoutedEventArgs e)
+        {
+            _context = DataContext as MainTabViewModel;
+            CheckBox b = sender as CheckBox;
+            ShortOrderItem order = b.CommandParameter as ShortOrderItem;
+            _context.ServeOrder(order);
+       }
     }
 }

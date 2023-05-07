@@ -34,7 +34,7 @@ namespace CashierUI.Parts
             _context = DataContext as MenuTabViewModel;
             Button b = sender as Button;
             MenuItemName menuItem = b.CommandParameter as MenuItemName;
-            string sureMessage = $"Are you sure to permanently remove selected menu item named \"{menuItem.Name}\"?";
+            string sureMessage = $"Are you sure to permanently remove selected menu item named \"{menuItem.Name}\"? This action will also remove the item from the records";
             var DialogResult = MessageBox.Show(sureMessage, "Warning", MessageBoxButton.YesNo);
             if (DialogResult == MessageBoxResult.Yes) _context.RemoveMenuItem(menuItem);
         }

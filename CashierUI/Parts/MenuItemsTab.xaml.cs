@@ -26,6 +26,12 @@ namespace CashierUI.Parts
         {
             InitializeComponent();
         }
-        MainTabViewModel _context;           
+        MainTabViewModel _context;
+
+        private void AddMenu_Click(object sender, RoutedEventArgs e)
+        {
+            _context = DataContext as MainTabViewModel;
+            _context.AddMenu();
+        }
     }
 }

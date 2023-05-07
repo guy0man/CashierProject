@@ -36,5 +36,10 @@ namespace CashierUI
             mainTabViewModel.LoadMenuTabs();
             mainTabViewModel.LoadOpenTabs();
         }
+
+        private void SettingsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            mainTabViewModel.OpenSettings();
+        }
     }
 }

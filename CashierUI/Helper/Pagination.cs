@@ -13,8 +13,8 @@ namespace CashierUI.Helper
     {
         private readonly Action _naayUpdate;
         private int _totalPages;
-        private string _enteredPage = "1";
-        private int _currentPage = 1;
+        private string _enteredPage = "0";
+        private int _currentPage = 0;
 
         public Pagination(Action naayUpdate)
         {
@@ -70,7 +70,7 @@ namespace CashierUI.Helper
             set => _currentPage = value;
         }
 
-        public int ItemsPerPage { get; set; } = 100;
+        public int ItemsPerPage { get; set; } = 50;
 
 
         public void NextPage()
@@ -90,7 +90,7 @@ namespace CashierUI.Helper
 
         public void PrevPage()
         {
-            if (CurrentPage == 1) return;
+            if (CurrentPage <= 1) return;
             CurrentPage--;
             EnteredPage = CurrentPage.ToString();
 
@@ -98,7 +98,7 @@ namespace CashierUI.Helper
         }
         public void FirstPage()
         {
-            if (CurrentPage == 1) return;
+            if (CurrentPage >= 1) return;
             CurrentPage = 1;
             EnteredPage = CurrentPage.ToString();
             OnPropertyChanged(nameof(EnteredPage));
