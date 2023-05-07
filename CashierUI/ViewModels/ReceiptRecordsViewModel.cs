@@ -51,7 +51,8 @@ namespace CashierUI.ViewModels
             var query = _context.Tabs
                 .Where(c => c.IsClose == true &&
             (c.CustomerName.ToLower().Contains(search) ||
-            c.Date.ToString().Contains(search)));
+            c.Date.ToString().Contains(search) ||
+            c.TabId.ToString("00000000000000000000").Contains(search)));
             UpdateTotalPages(query.Count());
             var tabs = query
                 .OrderByDescending(c=>c.Date)
