@@ -4,6 +4,7 @@ using CashierDB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CashierDB.Migrations
 {
     [DbContext(typeof(CashierContext))]
-    partial class CashierContextModelSnapshot : ModelSnapshot
+    [Migration("20230508182048_v1.0")]
+    partial class v10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -242,9 +244,6 @@ namespace CashierDB.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Percentage")
-                        .HasColumnType("int");
-
                     b.HasKey("PriceModifierId");
 
                     b.ToTable("PriceModifier", (string)null);
@@ -302,6 +301,9 @@ namespace CashierDB.Migrations
 
                     b.Property<bool>("IsTakeOut")
                         .HasColumnType("bit");
+
+                    b.Property<int>("PriceModifier")
+                        .HasColumnType("int");
 
                     b.Property<float>("Tip")
                         .HasColumnType("real");

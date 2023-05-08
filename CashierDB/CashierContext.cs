@@ -20,12 +20,18 @@ namespace CashierDB
         public DbSet<OrderList> OrderLists { get; set; }
         public DbSet<Tab> Tabs { get; set; }
         public DbSet<ItemType> ItemTypes { get; set; }
+        public DbSet<PriceModifier> PriceModifiers { get; set; }
+        public DbSet<PriceModifiersApplied> PriceModifiersApplications { get; set; }
+        public DbSet<Company> Company { get; set; }
         protected override void OnModelCreating(ModelBuilder mb)
         {         
             mb.ApplyConfiguration(new MenuItemConfiguration());
             mb.ApplyConfiguration(new OrderListConfiguration());
             mb.ApplyConfiguration(new TabConfiguration());
             mb.ApplyConfiguration(new ItemTypeConfiguration()); 
+            mb.ApplyConfiguration(new  PriceModifierConfiguration());
+            mb.ApplyConfiguration(new PriceModifiersAppliedConfiguration());
+            mb.ApplyConfiguration(new CompanyConfiguration());
         }
     }    
 }

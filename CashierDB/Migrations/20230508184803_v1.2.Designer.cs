@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CashierDB.Migrations
 {
     [DbContext(typeof(CashierContext))]
-    [Migration("20230506171438_v1.1")]
-    partial class v11
+    [Migration("20230508184803_v1.2")]
+    partial class v12
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,31 @@ namespace CashierDB.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("CashierDB.Tables.Company", b =>
+                {
+                    b.Property<int>("CompanyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompanyId"), 1L, 1);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CompanyId");
+
+                    b.ToTable("Company", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            CompanyId = 1
+                        });
+                });
 
             modelBuilder.Entity("CashierDB.Tables.ItemType", b =>
                 {
@@ -204,6 +229,57 @@ namespace CashierDB.Migrations
                     b.ToTable("OrderList", (string)null);
                 });
 
+            modelBuilder.Entity("CashierDB.Tables.PriceModifier", b =>
+                {
+                    b.Property<int>("PriceModifierId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PriceModifierId"), 1L, 1);
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsAdd")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PriceModifierId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("PriceModifier", (string)null);
+                });
+
+            modelBuilder.Entity("CashierDB.Tables.PriceModifiersApplied", b =>
+                {
+                    b.Property<int>("PriceModifiersAppliedId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PriceModifiersAppliedId"), 1L, 1);
+
+                    b.Property<int>("PriceModifier")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PriceModifierLinkPriceModifierId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TabId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PriceModifiersAppliedId");
+
+                    b.HasIndex("PriceModifierLinkPriceModifierId");
+
+                    b.HasIndex("TabId");
+
+                    b.ToTable("PriceModifiersApplied", (string)null);
+                });
+
             modelBuilder.Entity("CashierDB.Tables.Tab", b =>
                 {
                     b.Property<int>("TabId")
@@ -211,6 +287,9 @@ namespace CashierDB.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TabId"), 1L, 1);
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
 
                     b.Property<string>("CustomerName")
                         .IsRequired()
@@ -225,6 +304,12 @@ namespace CashierDB.Migrations
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsTakeOut")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PriceModifier")
+                        .HasColumnType("int");
+
                     b.Property<float>("Tip")
                         .HasColumnType("real");
 
@@ -232,6 +317,8 @@ namespace CashierDB.Migrations
                         .HasColumnType("real");
 
                     b.HasKey("TabId");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Tab", (string)null);
                 });
@@ -266,6 +353,50 @@ namespace CashierDB.Migrations
                     b.Navigation("TabLink");
                 });
 
+            modelBuilder.Entity("CashierDB.Tables.PriceModifier", b =>
+                {
+                    b.HasOne("CashierDB.Tables.Company", null)
+                        .WithMany("PriceModifiers")
+                        .HasForeignKey("CompanyId");
+                });
+
+            modelBuilder.Entity("CashierDB.Tables.PriceModifiersApplied", b =>
+                {
+                    b.HasOne("CashierDB.Tables.PriceModifier", "PriceModifierLink")
+                        .WithMany("Tabs")
+                        .HasForeignKey("PriceModifierLinkPriceModifierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CashierDB.Tables.Tab", "TabLink")
+                        .WithMany("PriceModifiers")
+                        .HasForeignKey("TabId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PriceModifierLink");
+
+                    b.Navigation("TabLink");
+                });
+
+            modelBuilder.Entity("CashierDB.Tables.Tab", b =>
+                {
+                    b.HasOne("CashierDB.Tables.Company", "CompanyLink")
+                        .WithMany("Tabs")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyLink");
+                });
+
+            modelBuilder.Entity("CashierDB.Tables.Company", b =>
+                {
+                    b.Navigation("PriceModifiers");
+
+                    b.Navigation("Tabs");
+                });
+
             modelBuilder.Entity("CashierDB.Tables.ItemType", b =>
                 {
                     b.Navigation("MenuItems");
@@ -276,9 +407,16 @@ namespace CashierDB.Migrations
                     b.Navigation("OrderLists");
                 });
 
+            modelBuilder.Entity("CashierDB.Tables.PriceModifier", b =>
+                {
+                    b.Navigation("Tabs");
+                });
+
             modelBuilder.Entity("CashierDB.Tables.Tab", b =>
                 {
                     b.Navigation("OrderLists");
+
+                    b.Navigation("PriceModifiers");
                 });
 #pragma warning restore 612, 618
         }

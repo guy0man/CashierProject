@@ -259,5 +259,43 @@ namespace CashierUI.ViewModels
             window.ShowDialog();
         }
         #endregion
+        #region Company
+        public ObservableCollection<PriceModifiersName> PriceModifiers { get; set; } = new();
+        public string CompanyName { get; set; }
+        public string Address { get; set; }
+        public void LoadCompany()
+        {
+            var company = _context.Company.First();
+            if (company.Name != null) CompanyName = company.Name;
+            if (company.Address != null) Address = company.Address;          
+        }
+        public void LoadPriceMods()
+        {
+            var priceMods = _context.PriceModifiers.Select(c => new PriceModifiersName(c.PriceModifierId, c.Name, c.Percentage, c.IsAdd)).ToList();
+            PriceModifiers.Clear();
+            foreach (var mod in priceMods) PriceModifiers.Add(mod);
+        }
+        public EditCompanyViewModel editCompVM { get; set; }
+        public UserControl CompanyUC { get; set; }
+        public void EditCompany()
+        {
+            editCompVM = new EditCompanyViewModel(_context, this);
+            CompanyUC = new EditCompany();
+            CompanyUC.DataContext = editCompVM;
+            OnPropertyChanged(nameof(CompanyUC));
+        }
+        public void CheckEditComp()
+        {
+            if (editCompVM.DialogResult)
+            {
+                CompanyUC = null;
+                LoadCompany();
+                LoadPriceMods();
+            }
+            OnPropertyChanged(nameof(CompanyUC));
+            OnPropertyChanged(nameof(CompanyName));
+            OnPropertyChanged(nameof(Address));
+        }
+        #endregion
     }
 }

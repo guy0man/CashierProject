@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="CashierUI.Parts.MyCompanyTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CashierUI.Parts"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Rectangle HorizontalAlignment="Left" Width="125" Height="125" Stroke="Black"></Rectangle>
+        <TextBlock VerticalAlignment="Bottom" FontSize="50" Grid.Column="1" TextWrapping="Wrap" Padding="10,0,0,0" Text="{Binding Path= CompanyName, FallbackValue='Company Name'}"></TextBlock>
+        <Button x:Name="EditCompanyBtn" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="20" Click="EditCompanyBtn_Click">
+            <Path Fill="#000000" Data="M13.5 0c1.381 0 2.5 1.119 2.5 2.5 0 0.563-0.186 1.082-0.5 1.5l-1 1-3.5-3.5 1-1c0.418-0.314 0.937-0.5 1.5-0.5zM1 11.5l-1 4.5 4.5-1 9.25-9.25-3.5-3.5-9.25 9.25zM11.181 5.681l-7 7-0.862-0.862 7-7 0.862 0.862z"></Path>
+        </Button>
+        <TextBlock FontWeight="Bold" TextAlignment="Right"  Grid.Row="1" Text="Address : " Width="100" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,0,0"></TextBlock>
+        <TextBlock Padding="10,0,0,0" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Text="{Binding Path= Address, FallbackValue= '&lt;address>'}" Margin="0,10,0,0"></TextBlock>
+        <TextBlock FontWeight="Bold" Grid.Row="2" Grid.Column="1" Text="Discounts and Price Modifiers" Margin="0,10,0,0"></TextBlock>
+        <ListView Grid.Row="3" Grid.Column="1" Margin="0,5,0,10" FontSize="20">
+            <ListView.View>
+                <GridView>
+                    <GridView.Columns>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path= Name}" Header="Item" ></GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path= Percentage}" Header="Percentage"></GridViewColumn>
+                    </GridView.Columns>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Frame Content="{Binding Path= CompanyUC}" Grid.RowSpan="4" Grid.ColumnSpan="2" NavigationUIVisibility="Hidden"></Frame>
+    </Grid>
+</UserControl>

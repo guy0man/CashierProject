@@ -35,6 +35,8 @@ namespace CashierUI
             DataContext = mainTabViewModel;
             mainTabViewModel.LoadMenuTabs();
             mainTabViewModel.LoadOpenTabs();
+            mainTabViewModel.LoadCompany();
+            mainTabViewModel.LoadPriceMods();
         }
 
         private void SettingsBtn_Click(object sender, RoutedEventArgs e)

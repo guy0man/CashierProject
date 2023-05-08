@@ -68,6 +68,7 @@ namespace CashierUI.ViewModels
         public ObservableCollection<string> Errors { get; set; } = new();
         public string Name { get; set; }
         public string TabTotal { get; set; }
+        public bool IsTakeOut { get; set; }         
         public void LoadTotal()
         {
             string total = $"₱{Orders.Sum(c => c.RealTotal)}";
@@ -153,11 +154,13 @@ namespace CashierUI.ViewModels
             {
                 var tab = new Tab();
                 tab.CustomerName = Name;
+                tab.CompanyId = 1;
                 tab.Date = DateTime.Now;
                 tab.Total = float.Parse(TabTotal.Remove(0,1));
                 tab.Tip = 0;
                 tab.IsClose = false;
                 tab.IsPaid = false;
+                tab.IsTakeOut = IsTakeOut;
                 tab.OrderLists = new List<OrderList>();
                 foreach (var order in Orders)
                 {

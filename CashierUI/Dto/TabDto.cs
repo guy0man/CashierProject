@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CashierUI.Dto
 {
@@ -29,6 +30,7 @@ namespace CashierUI.Dto
         #endregion
         public int TabId { get; set; }
         public string Name { get; set; }
+        public Visibility TakeOut { get; set; }
         public ObservableCollection<ShortOrderItem> Orders { get; set; } = new();
         public string Total { get; set; }
         public string _paymentStatus;
@@ -46,6 +48,8 @@ namespace CashierUI.Dto
             TabId = tab.TabId;
             Name = tab.CustomerName;
             Total = $"₱{tab.Total.ToString()}";
+            if (tab.IsTakeOut) TakeOut = Visibility.Visible;
+            else TakeOut = Visibility.Hidden;
             if (tab.IsPaid) _paymentStatus = "Paid";
             else _paymentStatus = "Pending";
             foreach (var order in tab.OrderLists)
