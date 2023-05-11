@@ -91,6 +91,7 @@ namespace CashierUI.ViewModels
         {
             var tabs = _context.Tabs
                 .Include(c=>c.OrderLists)
+                .ThenInclude(c=>c.MenuItemLink)
                 .Where(c=>c.IsClose == false)
                 .OrderBy(c=>c.Date)
                 .Select(c=> new OpenTabDetails(c))
