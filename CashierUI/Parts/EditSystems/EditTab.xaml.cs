@@ -67,8 +67,11 @@ namespace CashierUI.Parts.EditSystems
         }
 
         private void cancelCB_Click(object sender, RoutedEventArgs e)
-        {
+        {         
             _context = DataContext as EditTabViewModel;
+            CheckBox b = sender as CheckBox;
+            PartialOrderItem order = b.CommandParameter as PartialOrderItem;
+            _context.CancelOrder(order);
             _context.LoadTotal();
         }
     }

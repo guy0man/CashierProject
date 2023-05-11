@@ -21,7 +21,7 @@ namespace CashierUI.Dto
             ItemTypeId = item.ItemTypeId;
             Name = item.Name;
             Type = item.ItemTypeLink.Name;
-            Price = $"₱{item.Price}";
+            Price = $"₱{item.Price:N2}";
             Stock = item.Stock;
         }
     }

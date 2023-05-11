@@ -67,7 +67,7 @@ namespace CashierUI.Parts
             _context = DataContext as ReceiptRecordsViewModel;
             _pagination = _context.PageDetails;
             _context.PropertyChanged += ContextOnPropertyChanged;
-            OrdersList.Visibility = Visibility.Collapsed;
+            DetailsGrid.Visibility = Visibility.Collapsed;
 
         }
 
@@ -103,9 +103,9 @@ namespace CashierUI.Parts
             if (e.PropertyName == nameof(_context.SelectedTab))
             {
                 if (_context.SelectedTab == null)
-                    OrdersList.Visibility = Visibility.Collapsed;
+                    DetailsGrid.Visibility = Visibility.Collapsed;
                 else
-                    OrdersList.Visibility = Visibility.Visible;
+                    DetailsGrid.Visibility = Visibility.Visible;
             }
         }
     }

@@ -71,7 +71,7 @@ namespace CashierUI.ViewModels
         public bool IsTakeOut { get; set; }         
         public void LoadTotal()
         {
-            string total = $"₱{Orders.Sum(c => c.RealTotal)}";
+            string total = $"₱{Orders.Sum(c => c.RealTotal):N2}";
             TabTotal = total;
             OnPropertyChanged(nameof(TabTotal));
         }
@@ -82,7 +82,7 @@ namespace CashierUI.ViewModels
             if (order.IsCanceled != true)
             {
                 order.RealTotal = total;
-                order.realTotalText = $"₱{total}";
+                order.realTotalText = $"₱{total:N2}";
             }
 
         }
@@ -101,6 +101,22 @@ namespace CashierUI.ViewModels
             {
                 MessageBox.Show(ex.InnerException.Message);
             }
+        }
+        public void CancelOrder(PartialOrderItem order)
+        {
+            var menuItem = _context.MenuItems.First(c => c.MenuItemId == order.MenuItemId);
+            if (order.IsCanceled) menuItem.Stock += order.Quantity;
+            else menuItem.Stock -= order.Quantity;
+            try
+            {
+                _context.SaveChanges();
+                LoadMenuTabs();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.InnerException.Message);
+            }
+
         }
         public void AddQuant(PartialOrderItem order)
         {
@@ -175,6 +191,16 @@ namespace CashierUI.ViewModels
                         IsOld = order.IsOld
                     });
                 }
+                tab.PriceModifiers = new List<PriceModifiersApplied>();
+                var priceModifiers = _context.PriceModifiers.Where(c => c.AutoApply == true);
+                if (priceModifiers.Count() != 0)
+                {
+                    foreach (var pm in priceModifiers)
+                    {
+                        float total = tab.Total * (float)(pm.Percentage);
+                        tab.PriceModifiers.Add(new PriceModifiersApplied { PriceModifierId = pm.PriceModifierId, Total = total });
+                    }
+                }               
                 try
                 {
                     _context.Add(tab);

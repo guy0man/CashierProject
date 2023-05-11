@@ -10,8 +10,9 @@ namespace CashierDB.Tables
     {
         public int PriceModifierId {get; set;}
         public string Name { get; set;}
-        public int Percentage { get; set;}
+        public double Percentage { get; set;}
         public bool IsAdd { get; set;}
+        public bool AutoApply { get; set;}
         //links
         public ICollection<PriceModifiersApplied> Tabs { get; set;}           
     }

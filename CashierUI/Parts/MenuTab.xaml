@@ -37,7 +37,7 @@
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path= Name}" Header="Item" ></GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path= Name}" Header="Item"></GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Path= Price}" Header="Price"></GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Path= Stock}" Header="Stock"></GridViewColumn>
                         <GridViewColumn>

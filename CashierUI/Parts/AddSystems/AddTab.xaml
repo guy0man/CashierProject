@@ -71,9 +71,9 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBox Style="{DynamicResource TextLabel}" Text="Name"></TextBox>
-            <TextBox Style="{DynamicResource TextInput}" Grid.Column="1" Text="{Binding Path= Name}"></TextBox>
-            <CheckBox Grid.Row="1" Grid.ColumnSpan="2" Margin="16,5,50,5" Content="Take-Out" HorizontalContentAlignment="Center" IsChecked="{Binding Path= IsTakeOut}"></CheckBox>
+            <TextBox Style="{DynamicResource TextLabel}" Text="Name" FontSize="20"></TextBox>
+            <TextBox Style="{DynamicResource TextInput}" Grid.Column="1" Text="{Binding Path= Name}" FontSize="20"></TextBox>
+            <CheckBox VerticalContentAlignment="Center" Grid.Row="1" Grid.ColumnSpan="2" Margin="16,5,50,5" Content="Take-Out" HorizontalContentAlignment="Center" IsChecked="{Binding Path= IsTakeOut}" FontSize="20" ></CheckBox>
             <ListView ItemsSource="{Binding Path= Orders}" Grid.ColumnSpan="2" Grid.Row="2" FontSize="15">
                 <ListView.View>
                     <GridView>
@@ -86,7 +86,7 @@
                                                 <ColumnDefinition></ColumnDefinition>
                                                 <ColumnDefinition></ColumnDefinition>
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Width="20" IsHitTestVisible="False" Text="{Binding Path= Quantity}"></TextBox>
+                                            <TextBox Width="30" IsHitTestVisible="False" Text="{Binding Path= Quantity}" HorizontalContentAlignment="Center"></TextBox>
                                             <Grid Grid.Column="1">
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition></RowDefinition>
@@ -112,8 +112,8 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <TextBox Style="{DynamicResource TextLabel}" Text="Total" Grid.Row="3"></TextBox>
-            <TextBox Style="{DynamicResource TextLabel}" Grid.Column="1" Grid.Row="3" Text="{Binding Path= TabTotal}" IsHitTestVisible="True" IsReadOnly="True"></TextBox>
+            <TextBox Style="{DynamicResource TextLabel}" Text="Total" Grid.Row="3" FontSize="20"></TextBox>
+            <TextBox Style="{DynamicResource TextLabel}" Grid.Column="1" Grid.Row="3" Text="{Binding Path= TabTotal}" IsHitTestVisible="True" IsReadOnly="True" FontSize="20"></TextBox>
         </Grid>
         <Grid Grid.Column="1" Margin="5">
             <Grid.RowDefinitions>

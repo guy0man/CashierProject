@@ -1,6 +1,8 @@
 ﻿using CashierDB;
 using CashierUI.Dto;
+using CashierUI.Parts.EditSystems;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 
 namespace CashierUI.ViewModels
@@ -43,8 +46,19 @@ namespace CashierUI.ViewModels
             OriginalInvoice = float.Parse(Invoice.Remove(0,1));
             numInvoice = OriginalInvoice;
             PaymentAmount = string.Empty;
-            Tip = string.Empty;
-            
+            LoadPriceModifiers();
+            Tip = string.Empty;           
+        }
+        public ObservableCollection<PriceModifiedView> PriceModifiers { get; set; } = new();
+        public void LoadPriceModifiers()
+        {
+            var priceModifiers = _context.PriceModifiersApplications
+                .Include(c=>c.PriceModifierLink)
+                .Where(c=>c.TabId == Tab.TabId)
+                .Select(c=> new PriceModifiedView(c))
+                .ToList();
+            PriceModifiers.Clear();
+            foreach(var mod in priceModifiers) PriceModifiers.Add(mod);
         }
         public ObservableCollection<string> Errors { get; set; } = new();
         public string _tip;
@@ -75,20 +89,39 @@ namespace CashierUI.ViewModels
         }
         public float numChange { get; set; }
         public string Change { get; set; }
+        public float GetPriceModSum()
+        {
+            float result = 0;
+            foreach (var mod in PriceModifiers)
+            {
+                if (mod.IsAdd)
+                {
+                    float addition = float.Parse(mod.Total.Remove(0, 1));
+                    result += addition;                   
+                }
+                else
+                {
+                    float subtraction = float.Parse(mod.Total.Remove(0, 1));
+                    result -= subtraction;
+                }
+            }
+            return result;
+        }
         public void LoadNewInvoice()
         {
+            var PriceMod = GetPriceModSum();
             if (_tip == "0" || _tip == string.Empty)
-            {
-                numInvoice = OriginalInvoice;
-                Invoice = $"₱{OriginalInvoice}";
+            {               
+                numInvoice = OriginalInvoice + PriceMod;
+                Invoice = $"₱{numInvoice:N2}";
                 OnPropertyChanged(nameof(Invoice));
                 return;
             }
-            numInvoice = OriginalInvoice;
+            numInvoice = OriginalInvoice + PriceMod;
             var tip = float.Parse(_tip);
             var newInvoice = tip + numInvoice;
             numInvoice = newInvoice;
-            Invoice = $"₱{newInvoice}";
+            Invoice = $"₱{newInvoice:N2}";
             OnPropertyChanged(nameof(Invoice));
         }
         public void CalculateChange()
@@ -98,7 +131,7 @@ namespace CashierUI.ViewModels
             else paymentAmount = float.Parse(_paymentAmount);
             var change = paymentAmount - numInvoice;
             numChange = change;
-            Change = $"₱{change}";
+            Change = $"₱{change:N2}";
             OnPropertyChanged(nameof(Change));
         }
         public virtual bool Validate()
@@ -120,6 +153,7 @@ namespace CashierUI.ViewModels
                 var tab = _context.Tabs.First(c => c.TabId == Tab.TabId);
                 if (Tip != string.Empty && Tip != "0") tab.Tip = float.Parse(Tip);
                 else tab.Tip = 0;
+                tab.Change = float.Parse(Change.Remove(0,1));
                 tab.IsPaid = true;
                 try
                 {
@@ -133,6 +167,25 @@ namespace CashierUI.ViewModels
                     DialogResult = false;
                 }
             }
+        }
+        public EditAppliedPriceModifiersViewModel editPriceModifierVM { get; set; }
+        public UserControl userControl { get; set; }
+        public void EditPM()
+        {
+            editPriceModifierVM = new EditAppliedPriceModifiersViewModel(_context,this);
+            userControl = new EditAppliedPriceModifier();
+            userControl.DataContext = editPriceModifierVM;
+            OnPropertyChanged(nameof(userControl));
+        }
+        public void CheckEditPM()
+        {
+            if (editPriceModifierVM.DialogResult)
+            {
+                userControl = null;
+                LoadPriceModifiers();
+                LoadNewInvoice();   
+            }
+            OnPropertyChanged(nameof(userControl));
         }
 
         public bool DialogResult { get; set; }

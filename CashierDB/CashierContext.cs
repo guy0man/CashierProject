@@ -24,7 +24,7 @@ namespace CashierDB
         public DbSet<PriceModifiersApplied> PriceModifiersApplications { get; set; }
         public DbSet<Company> Company { get; set; }
         protected override void OnModelCreating(ModelBuilder mb)
-        {         
+        {          
             mb.ApplyConfiguration(new MenuItemConfiguration());
             mb.ApplyConfiguration(new OrderListConfiguration());
             mb.ApplyConfiguration(new TabConfiguration());

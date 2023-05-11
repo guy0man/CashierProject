@@ -79,7 +79,7 @@ namespace CashierUI.Dto
             set
             {
                 _isCanceled = value;
-                if (IsServed)
+                if (IsServed || ServedQuantity != 0)
                 {
                     MessageBox.Show("You cannot cancel a served item", "Error");
                     _isCanceled = false;
@@ -88,13 +88,13 @@ namespace CashierUI.Dto
                 if (_isCanceled)
                 {
                     RealTotal = 0;
-                    realTotalText = $"₱0";
+                    realTotalText = $"₱0.00";
                     OnPropertyChanged(nameof(RealTotal));
                 }
                 else
                 {
                     RealTotal = Total;
-                    realTotalText = $"₱{Total}";
+                    realTotalText = $"₱{Total:N2}";
                     OnPropertyChanged(nameof (RealTotal));
                 }
             }
@@ -107,7 +107,7 @@ namespace CashierUI.Dto
             Price = float.Parse(menuItem.Price.Remove(0, 1));
             Total = Price;
             RealTotal = Price;
-            realTotalText = $"₱{Price}";
+            realTotalText = $"₱{Price:N2}";
             IsCanceled = false;
             IsServed = false;
             ServedQuantity = 0;
@@ -119,6 +119,7 @@ namespace CashierUI.Dto
         public int OrderItemId { get; set; }
         public int MenuItemId { get; set; }
         public bool IsCanceled { get; set; }
+        public Visibility CancelServe { get; set; }
         public bool _isServed;
         public bool IsServed
         {
@@ -140,11 +141,13 @@ namespace CashierUI.Dto
             MenuItemId = order.MenuItemId;
             Name = order.MenuItemLink.Name;
             IsCanceled = order.IsCanceled;
+            if (IsCanceled) CancelServe = Visibility.Hidden;
+            else CancelServe = Visibility.Visible;
             IsServed = order.IsServed;
             ServedQuantity = order.ServedQuantity;
             Quantity = order.Quantity;
             if (order.IsCanceled) Cost = $"Cancelled";
-            else Cost = $"₱{order.RealTotal.ToString()}";       
+            else Cost = $"₱{order.RealTotal:N2}";       
         }
     }
     public class OrderItemName
@@ -158,7 +161,8 @@ namespace CashierUI.Dto
             OrderListId = order.OrderListId;
             Name = order.MenuItemLink.Name;
             Quantity= order.Quantity;
-            Total = $"₱{order.RealTotal}";
+            if (order.IsCanceled) Total = $"Cancelled";
+            else Total = $"₱{order.RealTotal:N2}";
         }
     }
 }

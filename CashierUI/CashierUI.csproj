@@ -8,11 +8,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\BusinessImage.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.5.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CashierDB\CashierDB.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\BusinessImage.png" />
   </ItemGroup>
 
 </Project>

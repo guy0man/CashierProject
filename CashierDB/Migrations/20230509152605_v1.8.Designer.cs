@@ -4,6 +4,7 @@ using CashierDB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CashierDB.Migrations
 {
     [DbContext(typeof(CashierContext))]
-    partial class CashierContextModelSnapshot : ModelSnapshot
+    [Migration("20230509152605_v1.8")]
+    partial class v18
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -235,18 +237,18 @@ namespace CashierDB.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PriceModifierId"), 1L, 1);
 
-                    b.Property<bool>("AutoApply")
+                    b.Property<bool>("IsAdd")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsAdd")
+                    b.Property<bool>("IsSpecial")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Percentage")
-                        .HasColumnType("float");
+                    b.Property<int>("Percentage")
+                        .HasColumnType("int");
 
                     b.HasKey("PriceModifierId");
 
@@ -286,9 +288,6 @@ namespace CashierDB.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TabId"), 1L, 1);
-
-                    b.Property<float>("Change")
-                        .HasColumnType("real");
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");

@@ -1,6 +1,7 @@
 ﻿using CashierDB;
 using CashierDB.Tables;
 using CashierUI.Dto;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -46,7 +47,7 @@ namespace CashierUI.ViewModels
             bool isValid = Validate();
             if (isValid)
             {
-                var tab = _context.Tabs.First(c=>c.TabId == TabToEdit.TabId);
+                var tab = _context.Tabs.Include(c=>c.PriceModifiers).ThenInclude(c=>c.PriceModifierLink).First(c => c.TabId == TabToEdit.TabId);
                 tab.CustomerName = Name;
                 tab.Total = float.Parse(TabTotal.Remove(0, 1));
                 tab.OrderLists = new List<OrderList>();
@@ -61,7 +62,11 @@ namespace CashierUI.ViewModels
                     if (order.ServedQuantity != order.Quantity) item.IsServed = false;
                     else item.IsServed = order.IsServed;
                     item.ServedQuantity = order.ServedQuantity;
-                    tab.OrderLists.Add(item);
+                    tab.OrderLists.Add(item);                
+                }
+                foreach(var item in tab.PriceModifiers)
+                {
+                    item.Total = tab.Total * (float)(item.PriceModifierLink.Percentage/100);
                 }
                 try
                 {

@@ -10,7 +10,8 @@ namespace CashierDB.Tables
     {
         public int PriceModifiersAppliedId { get; set; }
         public int TabId { get; set; }
-        public int PriceModifier { get; set; }
+        public int PriceModifierId { get; set; }
+        public float Total { get; set; }
         //links
         public Tab TabLink { get; set; }
         public PriceModifier PriceModifierLink { get; set; }

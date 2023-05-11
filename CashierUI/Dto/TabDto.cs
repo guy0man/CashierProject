@@ -47,9 +47,9 @@ namespace CashierUI.Dto
         {
             TabId = tab.TabId;
             Name = tab.CustomerName;
-            Total = $"₱{tab.Total.ToString()}";
+            Total = $"₱{tab.OrderLists.Sum(c=>c.Total):N2}";         
             if (tab.IsTakeOut) TakeOut = Visibility.Visible;
-            else TakeOut = Visibility.Hidden;
+            else TakeOut = Visibility.Hidden;         
             if (tab.IsPaid) _paymentStatus = "Paid";
             else _paymentStatus = "Pending";
             foreach (var order in tab.OrderLists)
@@ -73,8 +73,8 @@ namespace CashierUI.Dto
             TabId = tab.TabId;
             RefNo = $"{tab.TabId : 00000000000000000000}";
             Name = tab.CustomerName;
-            Tip = $"₱{tab.Tip}";
-            Total = $"₱{tab.Total}";
+            Tip = $"₱{tab.Tip:N2}";
+            Total = $"₱{tab.Total:N2}";
             Date = $"{tab.Date:g}";
         }
     }

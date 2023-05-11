@@ -98,10 +98,10 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="Item" DisplayMemberBinding="{Binding Path= Name}"></GridViewColumn>
-                            <GridViewColumn Header="Cancelled" >
+                            <GridViewColumn >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox HorizontalAlignment="Center" IsChecked="{Binding Path= IsCanceled}" x:Name="cancelCB" Click="cancelCB_Click"></CheckBox>
+                                        <CheckBox HorizontalAlignment="Center" IsChecked="{Binding Path= IsCanceled}" x:Name="cancelCB" Click="cancelCB_Click" CommandParameter="{Binding}"></CheckBox>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

@@ -4,6 +4,7 @@ using CashierDB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CashierDB.Migrations
 {
     [DbContext(typeof(CashierContext))]
-    partial class CashierContextModelSnapshot : ModelSnapshot
+    [Migration("20230509084523_v1.6")]
+    partial class v16
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -235,18 +237,18 @@ namespace CashierDB.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PriceModifierId"), 1L, 1);
 
-                    b.Property<bool>("AutoApply")
+                    b.Property<bool>("IsAdd")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsAdd")
+                    b.Property<bool>("IsSpecial")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Percentage")
-                        .HasColumnType("float");
+                    b.Property<int>("Percentage")
+                        .HasColumnType("int");
 
                     b.HasKey("PriceModifierId");
 
@@ -261,18 +263,18 @@ namespace CashierDB.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PriceModifiersAppliedId"), 1L, 1);
 
-                    b.Property<int>("PriceModifierId")
+                    b.Property<int>("PriceModifier")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PriceModifierLinkPriceModifierId")
                         .HasColumnType("int");
 
                     b.Property<int>("TabId")
                         .HasColumnType("int");
 
-                    b.Property<float>("Total")
-                        .HasColumnType("real");
-
                     b.HasKey("PriceModifiersAppliedId");
 
-                    b.HasIndex("PriceModifierId");
+                    b.HasIndex("PriceModifierLinkPriceModifierId");
 
                     b.HasIndex("TabId");
 
@@ -286,9 +288,6 @@ namespace CashierDB.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TabId"), 1L, 1);
-
-                    b.Property<float>("Change")
-                        .HasColumnType("real");
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
@@ -356,7 +355,7 @@ namespace CashierDB.Migrations
                 {
                     b.HasOne("CashierDB.Tables.PriceModifier", "PriceModifierLink")
                         .WithMany("Tabs")
-                        .HasForeignKey("PriceModifierId")
+                        .HasForeignKey("PriceModifierLinkPriceModifierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

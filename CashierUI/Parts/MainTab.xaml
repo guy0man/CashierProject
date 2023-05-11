@@ -39,7 +39,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Grid Width="50" Height="35">
+                        <Grid Width="75" Height="50">
                             <Border CornerRadius="5" Background="LightGray"></Border>
                             <Border x:Name="Border" CornerRadius="5" Background="Transparent"  Opacity="0.75"></Border>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment= "Center"></ContentPresenter>
@@ -57,8 +57,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="{Binding Path=tabPanelHeight}"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Button x:Name="AddTabBtn" Click="AddTabBtn_Click" HorizontalAlignment="Right" Content="+" Margin="0,0,0,5" Style="{DynamicResource RoundedButtonStyle}"></Button>
@@ -73,7 +73,7 @@
                     <Grid Width="500">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height ="Auto"></RowDefinition>
                             <RowDefinition MinHeight="600"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
@@ -84,20 +84,20 @@
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="TAKE-OUT" Foreground="Orange" FontSize="20" Padding="5,0,0,0" Visibility="{Binding Path= TakeOut}"></TextBlock>
-                        <TextBox Style="{DynamicResource TextLabel}" Text="Name" Grid.Row="1"></TextBox>
-                        <TextBox Style="{DynamicResource TextLabel}" Text="{Binding Path= Name}" Grid.Column="1" HorizontalContentAlignment="Left" Grid.Row="1"></TextBox>
-                        <TextBlock Text="Payment Status : " Grid.Row="4"></TextBlock>
-                        <TextBlock Text="{Binding Path= PaymentStatus}" Foreground="Orange" Grid.Row="4" Grid.Column="1"></TextBlock>
-                        <ListView ItemsSource="{Binding Path= Orders}" Grid.ColumnSpan="2" Grid.Row="2">
+                        <TextBox Style="{DynamicResource TextLabel}" Text="Name" Grid.Row="1" FontSize="15"></TextBox>
+                        <TextBox Style="{DynamicResource TextLabel}" Text="{Binding Path= Name}" Grid.Column="1" HorizontalContentAlignment="Left" Grid.Row="1" FontSize="15"></TextBox>
+                        <TextBlock Text="Payment Status : " Grid.Row="4" FontSize="15"></TextBlock>
+                        <TextBlock Text="{Binding Path= PaymentStatus}" Foreground="Orange" Grid.Row="4" Grid.Column="1" FontSize="15"></TextBlock>
+                        <ListView ItemsSource="{Binding Path= Orders}" Grid.ColumnSpan="2" Grid.Row="2" FontSize="20">
                             <ListView.View>
                                 <GridView>
                                     <GridView.Columns>
                                         <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Path=Quantity}"></GridViewColumn>
                                         <GridViewColumn Header="Item" DisplayMemberBinding="{Binding Path= Name}"></GridViewColumn>
-                                        <GridViewColumn>
+                                        <GridViewColumn Width="100">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <CheckBox x:Name="ServedCB" IsChecked="{Binding Path= IsServed}" CommandParameter="{Binding}" Click="ServedCB_Click"></CheckBox>
+                                                    <CheckBox x:Name="ServedCB" IsChecked="{Binding Path= IsServed}" CommandParameter="{Binding}" Click="ServedCB_Click" Visibility="{Binding Path= CancelServe}" Margin="35,0,0,0"></CheckBox>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
@@ -106,8 +106,8 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                        <TextBox Style="{DynamicResource TextLabel}" Grid.Row="3" Text="Total"></TextBox>
-                        <TextBox Style="{DynamicResource TextLabel}" Text="{Binding Path= Total}" Grid.Row="3" Grid.Column="1" HorizontalContentAlignment="Left"></TextBox>
+                        <TextBox Style="{DynamicResource TextLabel}" Grid.Row="3" Text="Total" FontSize="15"></TextBox>
+                        <TextBox Style="{DynamicResource TextLabel}" Text="{Binding Path= Total}" Grid.Row="3" Grid.Column="1" HorizontalContentAlignment="Left" FontSize="15"></TextBox>
                         <Grid Grid.Row="5" Grid.ColumnSpan="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>

@@ -11,37 +11,32 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CashierUI.Parts
+namespace CashierUI.Parts.AddSystems
 {
     /// <summary>
-    /// Interaction logic for PayWindow.xaml
+    /// Interaction logic for AddPriceModifier.xaml
     /// </summary>
-    public partial class PayWindow : Window
+    public partial class AddPriceModifier : UserControl
     {
-        public PayWindow()
+        public AddPriceModifier()
         {
             InitializeComponent();
         }
-        PayWindowViewModel _context;
-
-        private void CancelBtn_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
+        AddPriceModifierViewModel _context;
 
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
-            _context = DataContext as PayWindowViewModel;
-            _context.Pay();
-            if (_context.DialogResult) this.Close();
+            _context = DataContext as AddPriceModifierViewModel;
+            _context.Add();
         }
 
-        private void editPMBtn_Click(object sender, RoutedEventArgs e)
+        private void CancelBtn_Click(object sender, RoutedEventArgs e)
         {
-            _context = DataContext as PayWindowViewModel;
-            _context.EditPM();
+            _context = DataContext as AddPriceModifierViewModel;
+            _context.Cancel();
         }
     }
 }

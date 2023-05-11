@@ -88,19 +88,30 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Border Background="White" Grid.RowSpan="6" Grid.ColumnSpan="2"></Border>
+        <Rectangle HorizontalAlignment="Left" Width="125" Height="125" Stroke="Black">
+            <Rectangle.Fill>
+                <ImageBrush ImageSource="/CashierUI;component/Images/BusinessImage.png"></ImageBrush>
+            </Rectangle.Fill>
+        </Rectangle>
         <Button x:Name="AddImageBtn" Style="{DynamicResource PictureButtonStyle}" Content="+" FontSize="40" Click="AddImageBtn_Click"></Button>
-        <Rectangle HorizontalAlignment="Left" Width="125" Height="125" Stroke="Black"></Rectangle>
-        <TextBox VerticalAlignment="Bottom" FontSize="30" Grid.Column="1" TextWrapping="Wrap" Padding="10,0,0,0" Text="{Binding Path= CompanyName}"></TextBox>
-        <TextBlock TextAlignment="Right"  Grid.Row="1" Text="Address : " Width="100" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,0,0"></TextBlock>
+        <TextBox VerticalAlignment="Bottom" FontSize="50" Grid.Column="1" TextWrapping="Wrap" Padding="10,0,0,0" Text="{Binding Path= CompanyName}"></TextBox>
+        <TextBlock FontWeight="Bold" TextAlignment="Right"  Grid.Row="1" Text="Address : " Width="100" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,0,0"></TextBlock>
         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path= Address}" Margin="0,10,0,0" Height="50" TextWrapping="Wrap" AcceptsReturn="True"></TextBox>
-        <TextBlock Grid.Row="2" Grid.Column="1" Text="Discounts and Price Modifiers" Margin="0,10,0,0"></TextBlock>
+        <TextBlock FontWeight="Bold" Grid.Row="2" Grid.Column="1" Text="Discounts and Price Modifiers" Margin="0,10,0,0"></TextBlock>
         <Button x:Name="AddPModBtn" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Margin="10,0" Style="{DynamicResource RoundedButtonStyle}" Content="+" Click="AddPModBtn_Click"></Button>
-        <ListView Grid.Row="3" Grid.Column="1" Margin="0,5,0,10">
+        <ListView FontSize="20" Grid.Row="3" Grid.Column="1" Margin="0,5,0,10" ItemsSource="{Binding Path= PriceModifiers}">
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path= Name}" Header="Item" ></GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path= Name}" Header="Item" Width="300" ></GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Path= Percentage}" Header="Percentage"></GridViewColumn>
+                        <GridViewColumn Width="150" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox HorizontalAlignment="Center" IsChecked="{Binding Path= boolAutoApply}" x:Name="autoApplyCB" Click="autoApplyCB_Click" CommandParameter="{Binding}" Content="Auto-Apply" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"></CheckBox>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -122,6 +133,6 @@
             <Button x:Name="SaveBtn" Style="{DynamicResource BigRoundedButtonStyle}" Content="Save" Margin="0,0,30,0" Click="SaveBtn_Click"></Button>
             <Button x:Name="CancelBtn" Style="{DynamicResource BigRoundedButtonStyle}" Content="Cancel" Click="CancelBtn_Click"></Button>
         </StackPanel>
-        <Frame Grid.RowSpan="4" Grid.Column="2"></Frame>
+        <Frame Content="{Binding Path=AddPriceModUC}" NavigationUIVisibility="Hidden" Grid.RowSpan="6" Grid.ColumnSpan="2"></Frame>
     </Grid>
 </UserControl>

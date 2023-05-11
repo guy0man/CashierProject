@@ -98,17 +98,54 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView x:Name="OrdersList" Grid.Row="1" Grid.Column="1" Width="250" ItemsSource="{Binding Path= Orders}" FontSize="15">
-            <ListView.View>
-                <GridView>
-                    <GridView.Columns>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path= Quantity}" Header="Quantity" ></GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path= Name}" Header="Item Name"></GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path= Total}" Header="Total"></GridViewColumn>
-                    </GridView.Columns>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <Grid Grid.Row="1" Grid.Column="1" x:Name="DetailsGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBox Style="{DynamicResource TextLabel}" Text="Name"></TextBox>
+            <TextBox Grid.Column="1" Style="{DynamicResource TextLabel}" Text="{Binding Path=Name}"></TextBox>
+            <ListView Grid.Row="1" Grid.ColumnSpan="2" Width="250" ItemsSource="{Binding Path= Orders}" FontSize="15">
+                <ListView.View>
+                    <GridView>
+                        <GridView.Columns>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path= Quantity}" Header="Quantity" ></GridViewColumn>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path= Name}" Header="Item Name"></GridViewColumn>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path= Total}" Header="Total"></GridViewColumn>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <TextBox Grid.Row="2" Style="{DynamicResource TextLabel}" Text="SubTotal"></TextBox>
+            <TextBox Grid.Row="2" Grid.Column="1" Style="{DynamicResource TextLabel}" Text="{Binding Path= SubTotal}"></TextBox>
+            <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Row="3" Grid.Column="1" BorderThickness="0" Background="Transparent" IsHitTestVisible="False" ItemsSource="{Binding Path= PriceModifiers}">
+                <ListBox.ItemTemplate>
+                    <ItemContainerTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition MinWidth="150"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Path = Name}"></TextBlock>
+                            <TextBlock Text="{Binding Path= Total}" Grid.Column="2" HorizontalAlignment="Right"></TextBlock>
+                        </Grid>
+                    </ItemContainerTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <TextBox Grid.Row="4" Style="{DynamicResource TextLabel}" Text="Tip"></TextBox>
+            <TextBox Grid.Row="4" Grid.Column="1" Style="{DynamicResource TextLabel}" Text="{Binding Path= Tip}"></TextBox>
+            <TextBox Grid.Row="5" Style="{DynamicResource TextLabel}" Text="Total"></TextBox>
+            <TextBox Grid.Row="5" Grid.Column="1" Style="{DynamicResource TextLabel}" Text="{Binding Path= Total}"></TextBox>
+        </Grid>
         <Grid Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,5" DataContext="{Binding Path=PageDetails}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>

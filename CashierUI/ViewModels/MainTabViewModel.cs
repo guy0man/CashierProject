@@ -18,6 +18,7 @@ using CashierUI.Parts.AddSystems;
 using CashierUI.Parts.EditSystems;
 using CashierUI.Parts.ClearSystems;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 
 namespace CashierUI.ViewModels
 {
@@ -41,7 +42,8 @@ namespace CashierUI.ViewModels
         private CashierContext _context;
         public MainTabViewModel(CashierContext context)
         {
-            _context = context;    
+            _context = context;
+            SqlDependency.Start(@"Server=DESKTOP-A35B2UL\TACO;Initial Catalog=CashierDB;Trusted_Connection=True");
         }
 
         #region Menu  
@@ -84,6 +86,7 @@ namespace CashierUI.ViewModels
         #endregion
         #region Tabs
         public ObservableCollection<OpenTabDetails> OpenTabs { get; set; } = new();
+        public GridLength tabPanelHeight { get; set; }
         public void LoadOpenTabs()
         {
             var tabs = _context.Tabs
@@ -94,6 +97,9 @@ namespace CashierUI.ViewModels
                 .ToList();
             OpenTabs.Clear();
             foreach (var tab in tabs) OpenTabs.Add(tab);
+            if (OpenTabs.Count == 0) tabPanelHeight = new GridLength(1.0, GridUnitType.Star);
+            else tabPanelHeight = GridLength.Auto;
+            OnPropertyChanged(nameof(tabPanelHeight));
         }
         public AddTabViewModel addTabVM { get; set; }
         public UserControl TabUC { get; set; }
@@ -110,6 +116,7 @@ namespace CashierUI.ViewModels
             {
                 TabUC = null;
                 LoadOpenTabs();
+                LoadMenuTabs();
             }
             OnPropertyChanged(nameof(TabUC));
         }
@@ -127,6 +134,7 @@ namespace CashierUI.ViewModels
             {
                 TabUC = null;
                 LoadOpenTabs();
+                LoadMenuTabs();
             }
             OnPropertyChanged(nameof(TabUC));
         }
@@ -152,7 +160,7 @@ namespace CashierUI.ViewModels
         }
         public void CloseTab(OpenTabDetails tabToClose)
         {
-            if (tabToClose.Orders.Any(c=>c.IsServed == false))
+            if (tabToClose.Orders.Any(c=>c.IsServed == false && c.IsCanceled != true))
             {
                 MessageBox.Show("You cannot close a tab with unserved orders", "Errors");
                 return;
@@ -181,12 +189,17 @@ namespace CashierUI.ViewModels
                 MessageBox.Show("You cannot remove an paid tab", "Error");
                 return;
             }
-            var tab = _context.Tabs.First(c => c.TabId == tabToRemove.TabId);
+            var tab = _context.Tabs.Include(c=>c.OrderLists).ThenInclude(c=>c.MenuItemLink).First(c => c.TabId == tabToRemove.TabId);
+            foreach (var order in tab.OrderLists)
+            {
+                if (order.IsCanceled == false) order.MenuItemLink.Stock += order.Quantity;
+            }
             tab.OrderLists.Clear();
             try
             {
                 _context.Tabs.Remove(tab);
                 _context.SaveChanges();
+                LoadMenuTabs();
             }
             catch (Exception ex)
             {
@@ -271,7 +284,7 @@ namespace CashierUI.ViewModels
         }
         public void LoadPriceMods()
         {
-            var priceMods = _context.PriceModifiers.Select(c => new PriceModifiersName(c.PriceModifierId, c.Name, c.Percentage, c.IsAdd)).ToList();
+            var priceMods = _context.PriceModifiers.Select(c => new PriceModifiersName(c.PriceModifierId, c.Name, c.Percentage, c.IsAdd, c.AutoApply)).ToList();
             PriceModifiers.Clear();
             foreach (var mod in priceMods) PriceModifiers.Add(mod);
         }
@@ -296,6 +309,6 @@ namespace CashierUI.ViewModels
             OnPropertyChanged(nameof(CompanyName));
             OnPropertyChanged(nameof(Address));
         }
-        #endregion
+        #endregion       
     }
 }

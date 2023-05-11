@@ -52,7 +52,7 @@ namespace CashierUI.ViewModels
                 .Where(c => c.IsClose == true &&
             (c.CustomerName.ToLower().Contains(search) ||
             c.Date.ToString().Contains(search) ||
-            c.TabId.ToString("00000000000000000000").Contains(search)));
+            c.TabId.ToString().Contains(search)));
             UpdateTotalPages(query.Count());
             var tabs = query
                 .OrderByDescending(c=>c.Date)
@@ -81,22 +81,43 @@ namespace CashierUI.ViewModels
             {
                 _selectedTab = value;
                 OnPropertyChanged();
-                LoadOrders();
+                LoadDetails();
             }
         }
         public ObservableCollection<OrderItemName> Orders { get; set; } = new();
-        public void LoadOrders()
+        public ObservableCollection<PriceModifiedView> PriceModifiers { get; set; } = new();
+        public string Name { get; set; }
+        public string SubTotal { get; set; }
+        public string Tip { get; set; }
+        public string Total { get;set; }
+        public void LoadDetails()
         {
             if (SelectedTab == null) return;
             var tab = _context.Tabs
                 .Include(c=>c.OrderLists)
+                .Include(c=>c.PriceModifiers)
                 .First(c=>c.TabId == SelectedTab.TabId);
             Orders.Clear();
-            foreach(var item in tab.OrderLists)
+            Name = tab.CustomerName;
+            SubTotal = $"₱{tab.OrderLists.Sum(c => c.Total):N2}";
+            Tip = $"₱{tab.Tip:N2}";
+            Total = $"₱{tab.Total:N2}";
+            Orders.Clear();
+            foreach (var item in tab.OrderLists)
             {
                 var newOrderItem = new OrderItemName(item);
                 Orders.Add(newOrderItem);
             }
+            PriceModifiers.Clear();
+            foreach (var item in tab.PriceModifiers)
+            {
+                var mod = new PriceModifiedView(item);
+                PriceModifiers.Add(mod);
+            }
+            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged(nameof(SubTotal));
+            OnPropertyChanged(nameof(Tip));
+            OnPropertyChanged(nameof(Total));
         }
         private void UpdateTotalPages(int totalCount)
         {
