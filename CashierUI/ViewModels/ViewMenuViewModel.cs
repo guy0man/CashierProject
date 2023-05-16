@@ -70,7 +70,7 @@ namespace CashierUI.ViewModels
                 _context.SaveChanges();
                 Parent.Orders.Add(order);
                 Parent.LoadTotal();
-                Parent.LoadMenuTabs();
+                LoadMenuItems();
             }      
             catch (Exception ex)
             {

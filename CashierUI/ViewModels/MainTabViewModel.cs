@@ -43,7 +43,6 @@ namespace CashierUI.ViewModels
         public MainTabViewModel(CashierContext context)
         {
             _context = context;
-            SqlDependency.Start(@"Server=DESKTOP-A35B2UL\TACO;Initial Catalog=CashierDB;Trusted_Connection=True");
         }
 
         #region Menu  
